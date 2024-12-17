@@ -1,29 +1,29 @@
 <template>
-    <section class="post">
-      <h3>{{ post.title }}</h3>
-      <div v-if="post.image" class="image-container">
-        <img :src="post.imgURL" :alt="post.caption" />
-      </div>
-      <p>{{ post.content }}</p>
-    </section>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      post: {
-        type: Object,
-        required: true
-      }
-    },
-    methods: {
-      likePost() {
-        //when the button is clicked, dispatches the likePost action to the Vuex store, passing the id of the post
-        this.$store.dispatch('likePost', this.post.id);
-      }
+  <section class="post" @click="goToEditPage">
+    <h3>{{ post.title }}</h3>
+    <div v-if="post.image" class="image-container">
+      <img :src="post.imgURL" :alt="post.caption" />
+    </div>
+    <p>{{ post.content }}</p>
+  </section>
+</template>
+
+<script>
+export default {
+  props: {
+    post: {
+      type: Object,
+      required: true
     }
-  };
-  </script>
+  },
+  methods: {
+    goToEditPage() {
+      this.$router.push(`/edit-post/${this.post.id}`);
+    }
+  }
+};
+</script>
+
   
   <style scoped>
   .post {

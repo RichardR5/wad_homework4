@@ -39,6 +39,20 @@ const routes = [{
         name: 'AddPost',
         component: AddPost,
     },
+    {
+        path: '/edit-post/:id',
+        name: 'EditPost',
+        component: () => import('../views/EditPost.vue'),
+        beforeEnter: async (to, from, next) => {
+          let authResult = await auth.authenticated();
+          if (!authResult) {
+            next('/login');
+          } else {
+            next();
+          }
+        }
+      }
+      
 ];
 
 const router = createRouter({
