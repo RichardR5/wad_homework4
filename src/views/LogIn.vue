@@ -52,11 +52,11 @@ data: function() {
     })
     .then((data) => {
       console.log(data);
-      location.assign("/"); // Redirect on successful login
+      location.assign("/"); //redirect on successful login
     })
     .catch((error) => {
       console.error(error.message);
-      alert("Login failed"); // Show alert on login failure
+      alert("Login failed"); //show alert on login failure
       location.reload();
     });
 }}};

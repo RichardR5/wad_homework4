@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      authResult: false // Initialize as false
+      authResult: false
     }
   },
   methods: {
@@ -51,7 +51,7 @@ export default {
         const data = await response.json();
         console.log(data);
         console.log('JWT removed');
-        this.$store.dispatch('clearUserId'); // Clear userId in Vuex store
+        this.$store.dispatch('clearUserId');
         this.$router.push("/login");
       } catch (e) {
         console.log(e);
@@ -74,10 +74,10 @@ export default {
     }
   },
   async mounted() {
-    this.authResult = await auth.authenticated(); // Await the async function
+    this.authResult = await auth.authenticated();
     console.log('Authentication result:', this.authResult);
     if (this.authResult && auth.user.id) {
-      this.$store.dispatch('setUserId', auth.user.id); // Set userId in Vuex store
+      this.$store.dispatch('setUserId', auth.user.id);
     }
     this.$store.dispatch('fetchPosts');
   }
@@ -95,7 +95,7 @@ button{
   display: block;
   padding: 10px 16px;
   letter-spacing: 2px;
-  cursor: pointer; /* Added for better UX */
+  cursor: pointer;
 }
 .center {
   margin: 10px auto;
@@ -105,11 +105,5 @@ button{
   display: flex;
   justify-content: space-between;
   margin: 20px 0;
-}
-.add-button {
-  /* Additional styling if needed */
-}
-.delete-button {
-  /* Additional styling if needed */
 }
 </style>

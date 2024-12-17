@@ -38,7 +38,7 @@
       };
     },
     async mounted() {
-      this.postId = this.$route.params.id; // Get the post ID from the route
+      this.postId = this.$route.params.id;
       try {
         const response = await fetch(`http://localhost:3000/api/posts/${this.postId}`, {
           method: "GET",
@@ -91,7 +91,6 @@
   </script>
   
   <style scoped>
-  /* You can reuse styling from AddPost.vue */
   .add-post-container {
     max-width: 600px;
     margin: 50px auto;
@@ -100,7 +99,51 @@
     border-radius: 8px;
     background-color: #fafafa;
   }
-  
-  /* other styling as needed */
+
+  .add-post-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.add-post-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.add-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.add-button:hover {
+  background-color: #369870;
+}
   </style>
   

@@ -3,14 +3,14 @@ import { createStore } from 'vuex';
 export default createStore({
   state: {
     posts: [],
-    userId: null // Added userId to store the authenticated user's ID
+    userId: null //added userId to store the authenticated user's ID
   },
   mutations: {
     setPosts(state, posts) {
       state.posts = posts;
     },
     addPost(state, post) {
-      state.posts.unshift(post); // Adds the new post to the beginning of the array
+      state.posts.unshift(post);
     },
     deleteAllPosts(state) {
       state.posts = [];
@@ -27,7 +27,7 @@ export default createStore({
       try {
         const response = await fetch('http://localhost:3000/api/posts', {
           method: "GET",
-          credentials: 'include', // Include credentials to send cookies
+          credentials: 'include',
         });
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -45,24 +45,24 @@ export default createStore({
           headers: {
             'Content-Type': 'application/json'
           },
-          credentials: 'include', // Include credentials to send cookies
+          credentials: 'include',
           body: JSON.stringify(post)
         });
         if (!response.ok) {
           throw new Error('Failed to add post');
         }
         const newPost = await response.json();
-        commit('addPost', newPost); // Commit the actual post object
+        commit('addPost', newPost);
       } catch (error) {
         console.error('Error adding post:', error);
-        throw error; // Propagate error to component
+        throw error;
       }
     },
     async deleteAllPosts({ commit }) {
       try {
         const response = await fetch('http://localhost:3000/api/posts', {
           method: 'DELETE',
-          credentials: 'include', // Include credentials to send cookies
+          credentials: 'include',
         });
         if (!response.ok) {
           throw new Error('Failed to delete all posts');
@@ -70,7 +70,7 @@ export default createStore({
         commit('deleteAllPosts');
       } catch (error) {
         console.error('Error deleting all posts:', error);
-        throw error; // Propagate error to component
+        throw error;
       }
     },
     setUserId({ commit }, userId) {
@@ -79,7 +79,6 @@ export default createStore({
     clearUserId({ commit }) {
       commit('clearUserId');
     }
-    // ... other actions like likePost, resetLikes if needed
   },
   getters: {
     allPosts: state => state.posts,
