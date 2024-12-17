@@ -1,19 +1,19 @@
 export default {
-    user: { authenticated: false },
+    user: { authenticated: false, id: null },
     authenticated: async function() {
-        await fetch("http://localhost:3000/auth/authenticate", {
-                credentials: 'include',
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                this.user.authenticated = data.authenticated;
-                console.log(data);
-            })
-            .catch((e) => {
-                console.log(e);
-                console.log("error logout");
-            });
-        return this.user.authenticated;
+      try {
+        const response = await fetch("http://localhost:3000/auth/authenticate", {
+          credentials: 'include',
+        });
+        const data = await response.json();
+        this.user.authenticated = data.authenticated;
+        if (data.authenticated && data.user_id) {
+          this.user.id = data.user_id;
+        }
+        console.log('Authentication data:', data);
+      } catch (e) {
+        console.log('Error during authentication:', e);
+      }
+      return this.user.authenticated;
     }
-
-}
+  }

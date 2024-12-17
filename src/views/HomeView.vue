@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="container">
-      <button v-if = "authResult" @click="Logout" class="center">Logout</button>
+      <button v-if="authResult" @click="Logout" class="center">Logout</button>
 
       <div class="posts-container">
         <PostComponent
@@ -12,14 +12,16 @@
         />
       </div>
 
+      <div class="button-container">
+        <button @click="navigateToAddPost" class="add-button">Add post</button>
+        <button @click="deleteAllPosts" class="delete-button">Delete all</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-
 import auth from "../auth";
-
 import { mapGetters } from 'vuex';
 import PostComponent from "@/components/PostComponent.vue";
 
@@ -31,40 +33,58 @@ export default {
   computed: {
     ...mapGetters(['allPosts']),
     posts() {
-      console.log(this.allPosts);
+      console.log('Posts:', this.allPosts);
       return this.allPosts;
     }
   },
-   data: function() {
+  data() {
     return {
-    authResult: auth.authenticated()
+      authResult: false // Initialize as false
     }
   },
   methods: {
-    Logout() {
-      fetch("http://localhost:3000/auth/logout", {
+    async Logout() {
+      try {
+        const response = await fetch("http://localhost:3000/auth/logout", {
           credentials: 'include',
-      })
-      .then((response) => response.json())
-      .then((data) => {
+        });
+        const data = await response.json();
         console.log(data);
-        console.log('jwt removed');
+        console.log('JWT removed');
+        this.$store.dispatch('clearUserId'); // Clear userId in Vuex store
         this.$router.push("/login");
-      })
-      .catch((e) => {
+      } catch (e) {
         console.log(e);
-        console.log("error logout");
-      });
+        console.log("Error during logout");
+      }
+    },
+    navigateToAddPost() {
+      this.$router.push("/add-post");
+    },
+    async deleteAllPosts() {
+      if (confirm("Are you sure you want to delete all posts?")) {
+        try {
+          await this.$store.dispatch('deleteAllPosts');
+          alert("All posts have been deleted.");
+        } catch (error) {
+          console.error("Error deleting all posts:", error);
+          alert("Failed to delete all posts.");
+        }
+      }
     }
   },
-  mounted() {
+  async mounted() {
+    this.authResult = await auth.authenticated(); // Await the async function
+    console.log('Authentication result:', this.authResult);
+    if (this.authResult && auth.user.id) {
+      this.$store.dispatch('setUserId', auth.user.id); // Set userId in Vuex store
+    }
     this.$store.dispatch('fetchPosts');
   }
 };
 </script>
 
 <style scoped>
-
 button{
   margin-top: 30px;
   border-radius: 36px;
@@ -75,13 +95,21 @@ button{
   display: block;
   padding: 10px 16px;
   letter-spacing: 2px;
+  cursor: pointer; /* Added for better UX */
 }
 .center {
-  margin: auto;
-  border: 0;
-  padding: 10px 20px;
-  margin-top: 20px;
   margin: 10px auto;
   width: 30%; 
+}
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+.add-button {
+  /* Additional styling if needed */
+}
+.delete-button {
+  /* Additional styling if needed */
 }
 </style>
