@@ -2,7 +2,16 @@
   <div class="header">
     <div class="container">
       <button v-if = "authResult" @click="Logout" class="center">Logout</button>
-      <span>This is where the posts should be</span>
+
+      <div class="posts-container">
+        <PostComponent
+          v-for="post in posts"
+          :key="post.id"
+          :post="post"
+          class="post"
+        />
+      </div>
+
     </div>
   </div>
 </template>
@@ -11,13 +20,23 @@
 
 import auth from "../auth";
 
+import { mapGetters } from 'vuex';
+import PostComponent from "@/components/PostComponent.vue";
+
 export default {
   name: "HomeView",
   components: {
+    PostComponent,
+  },
+  computed: {
+    ...mapGetters(['allPosts']),
+    posts() {
+      console.log(this.allPosts);
+      return this.allPosts;
+    }
   },
    data: function() {
     return {
-    posts:[ ],
     authResult: auth.authenticated()
     }
   },
@@ -36,7 +55,10 @@ export default {
         console.log(e);
         console.log("error logout");
       });
-    },
+    }
+  },
+  mounted() {
+    this.$store.dispatch('fetchPosts');
   }
 };
 </script>
