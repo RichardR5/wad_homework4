@@ -38,7 +38,7 @@ export default createStore({
         console.error('Error fetching posts:', error);
       }
     },
-    async addPost({ commit, state }, post) {
+    async addPost({ commit }, post) {
       try {
         const response = await fetch('http://localhost:3000/api/posts', {
           method: 'POST',
